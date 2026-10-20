@@ -94,13 +94,11 @@ int main(void) {
 	/* USER CODE END 2 */
 
 	/* Initialize leds */
-	BSP_LED_Init(LED_GREEN);
 
 	/* Initialize USER push-button, will be used to trigger an interrupt each time it's pressed.*/
-	BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
-
-	// IMPORTANT!!!
-	// Call DAC_Init() after BSP_PB_INIT so that PA5 is set to SPI mode
+//	BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
+// IMPORTANT!!!
+// Call DAC_Init() after BSP_PB_INIT so that PA5 is set to SPI mode
 	DAC_init();
 	keypad_init();
 	Waveform_Init();
@@ -119,21 +117,21 @@ int main(void) {
 
 		int32_t key = keypad_getkey();
 
-		if(key >= 1 && key <= 5){
+		if (key >= 1 && key <= 5) {
 			set_frequency(key * 100); // increments of 100Hz
-		} else if (key == 6){
+		} else if (key == 6) {
 			set_shape(SINE);
-		} else if (key == 7){
+		} else if (key == 7) {
 			set_shape(TRIANGLE);
-		} else if(key == 8){
+		} else if (key == 8) {
 			set_shape(SAWTOOTH);
-		} else if(key == 9){
+		} else if (key == 9) {
 			set_shape(SQUARE);
-		} else if (key == STAR){
+		} else if (key == STAR) {
 			change_duty(-10);
-		} else if (key == 0){
+		} else if (key == 0) {
 			reset_duty();
-		} else if (key == POUND){
+		} else if (key == POUND) {
 			change_duty(10);
 		}
 
@@ -222,10 +220,10 @@ static void MX_GPIO_Init(void) {
 
 /* USER CODE BEGIN 4 */
 
-void TIM2_IRQ_Handler(void) {
+void TIM2_IRQHandler(void) {
 	if (TIM2->SR & TIM_SR_UIF) {
 		TIM2->SR = ~TIM_SR_UIF;
-		DAC_Write(next_sample());
+		DAC_write(next_sample());
 	}
 }
 

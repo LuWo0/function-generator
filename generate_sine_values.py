@@ -1,6 +1,6 @@
 import math
 
-TABLE_LEN = 300
+TABLE_LEN = 3000
 MID_CODE = 1861
 HIGH_CODE = 3722
 

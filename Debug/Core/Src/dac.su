@@ -2,5 +2,5 @@
 ../Core/Src/dac.c:12:13:dac_cs_low	4	static
 ../Core/Src/dac.c:18:13:dac_spi_tx16	16	static
 ../Core/Src/dac.c:32:6:DAC_init	8	static
-../Core/Src/dac.c:66:10:DAC_volt_conv	16	static
-../Core/Src/dac.c:74:6:DAC_write	24	static
+../Core/Src/dac.c:65:10:DAC_volt_conv	16	static
+../Core/Src/dac.c:73:6:DAC_write	24	static

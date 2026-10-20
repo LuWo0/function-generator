@@ -35,14 +35,13 @@ static const uint16_t *tables[4] = { square, triangle, sawtooth, sine };
 static Waveform wave = { .shape = SQUARE, .duty = 50, .step = 1, .index = 0,
 		.active = square };
 
-static void rebuild_square(void){
+static void rebuild_square(void) {
 	uint16_t threshold = (TABLE_LEN * wave.duty) / 100;
 
-	for(int16_t i = 0; i < TABLE_LEN; i++){
+	for (int16_t i = 0; i < TABLE_LEN; i++) {
 		square[i] = (i < threshold) ? HIGH_CODE : LOW_CODE;
 	}
 }
-
 
 void Waveform_Init(void) {
 
