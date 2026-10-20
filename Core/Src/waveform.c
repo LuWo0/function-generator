@@ -1,9 +1,10 @@
 #include "waveform.h"
 
-static uint16_t square[TABLE_LEN]; // not const because change in duty cycle will rewrite it
-static const uint16_t triangle[TABLE_LEN];
-static const uint16_t sawtooth[TABLE_LEN];
+static uint16_t square[TABLE_LEN];
+static uint16_t triangle[TABLE_LEN];
+static uint16_t sawtooth[TABLE_LEN];
 
+// Generated from generate_sine_values.py
 static const uint16_t sine[TABLE_LEN] = { 1861, 1900, 1939, 1978, 2017, 2056,
 		2094, 2133, 2171, 2210, 2248, 2286, 2324, 2361, 2399, 2436, 2473, 2510,
 		2546, 2582, 2618, 2653, 2688, 2723, 2758, 2792, 2825, 2858, 2891, 2923,
@@ -34,6 +35,15 @@ static const uint16_t *tables[4] = { square, triangle, sawtooth, sine };
 static Waveform wave = { .shape = SQUARE, .duty = 50, .step = 1, .index = 0,
 		.active = square };
 
+static void rebuild_square(void){
+	uint16_t threshold = (TABLE_LEN * wave.duty) / 100;
+
+	for(int16_t i = 0; i < TABLE_LEN; i++){
+		square[i] = (i < threshold) ? HIGH_CODE : LOW_CODE;
+	}
+}
+
+
 void Waveform_Init(void) {
 
 	// Triangle:
@@ -49,6 +59,8 @@ void Waveform_Init(void) {
 		sawtooth[i] = HIGH_CODE * i / (TABLE_LEN - 1);
 	}
 
+	rebuild_square();
+
 }
 uint16_t next_sample(void) {
 	const uint16_t *table = wave.active;
@@ -57,7 +69,7 @@ uint16_t next_sample(void) {
 
 	idx += wave.step;
 	if (idx >= TABLE_LEN) {
-		i -= TABLE_LEN;
+		idx -= TABLE_LEN;
 	}
 	wave.index = idx;
 	return code;
@@ -69,18 +81,19 @@ void set_frequency(uint16_t hz) {
 
 void set_shape(wave_state shape) {
 	wave.shape = shape;
-	wave.active = shape;
+	wave.active = tables[shape];
 }
 
 void change_duty(int8_t delta) {
 	if (wave.shape != SQUARE)
 		return;
 	wave.duty = CLAMP(wave.duty + delta, 10, 90);
-	// TODO: rebuild square
+	rebuild_square();
 }
 void reset_duty(void) {
 	if (wave.shape != SQUARE)
 		return;
 	wave.duty = 50;
-	// TODO: rebuild_square
+	rebuild_square();
 }
+

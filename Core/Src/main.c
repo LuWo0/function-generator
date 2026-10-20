@@ -18,6 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dac.h"
+#include "keypad.h"
+#include "waveform.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -99,6 +102,19 @@ int main(void)
 
   // IMPORTANT!!!
   // Call DAC_Init() after BSP_PB_INIT so that PA5 is set to SPI mode
+  DAC_init();
+  keypad_init();
+  Waveform_Init();
+
+
+  RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
+  TIM2->PSC = 0;
+  TIM2->ARR = 2666;
+  TIM2->DIER |= TIM_DIER_UIE;
+  NVIC_SetPriority(TIM2_IRQn, 1);
+  NVIC_EnableIRQ(TIM2_IRQn);
+  TIM2->CR1 |= TIM_CR1_CEN;
+
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -193,6 +209,13 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void TIM2_IRQ_Handler(void){
+	if(TIM2->SR & TIM_SR_UIF){
+		TIM2->SR = ~TIM_SR_UIF;
+		DAC_Write(next_sample());
+	}
+}
 
 /* USER CODE END 4 */
 
