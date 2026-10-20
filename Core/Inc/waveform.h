@@ -12,6 +12,9 @@
 #define MID_CODE 	1861  // 1500 / 3.3 * 4096 = ~1861
 #define HIGH_CODE 	3722 // 3000 / 3.3 * 4096 = ~3722
 
+// utility function. should probably go somewhere else but maybe i'll move it later
+#define CLAMP(x, low, high) (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
+
 
 typedef enum {
 	SQUARE,
@@ -33,7 +36,7 @@ void Waveform_Init(void);
 uint16_t next_sample(void);
 void set_frequency(uint16_t hz);
 void set_shape(wave_state shape);
-void change_duty(uint8_t delta);
+void change_duty(int8_t delta);
 void reset_duty(void);
 
 
