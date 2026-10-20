@@ -34,7 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define TIMER_TICKS 2666
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -109,7 +109,7 @@ int main(void)
 
   RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN;
   TIM2->PSC = 0;
-  TIM2->ARR = 2666;
+  TIM2->ARR = TIMER_TICKS;
   TIM2->DIER |= TIM_DIER_UIE;
   NVIC_SetPriority(TIM2_IRQn, 1);
   NVIC_EnableIRQ(TIM2_IRQn);
@@ -120,6 +120,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  //TODO:KEY LOGIC
+
+	  int32_t key = keypad_getkey();
+
+	  // if key >= 1 and <= 5, we set frequency to key * 100
+
+	  // else if key is 6, then we set_shape to SINE
+
+	  // else if key is 7, then we set_shape to TRIANGLE
+
+	  // else if key is 8, then we set_shape to SAWTOOTH
+
+	  // else if key is 9, then we set_shape to SQUARE
+
+	  // else if key is *, then we change_duty(-10)
+
+	  // else if key i #, then we chnage_duty(+10)
+
+	  // if 0, then we reset_duty()
 
     /* USER CODE END WHILE */
 
