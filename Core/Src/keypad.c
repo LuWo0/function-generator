@@ -13,8 +13,8 @@ static const keypad_pin_t col_pin[NUM_OF_COLS] = {
 
 static const keypad_pin_t row_pin[NUM_OF_ROWS] = {
 	{ GPIOA, GPIO_PIN_6 },
-	{ GPIOA, GPIO_PIN_7 },
-	{ GPIOB, GPIO_PIN_6 },
+	{ GPIOC, GPIO_PIN_0 },
+	{ GPIOC, GPIO_PIN_2 },
 	{ GPIOC, GPIO_PIN_1 },
 };
 
