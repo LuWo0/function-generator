@@ -1,6 +1,8 @@
 #ifndef WAVEFORM_H
 #define WAVEFORM_H
 
+#include <stdint.h>
+
 #define TABLE_LEN 	300
 
 // DAC codes given by:
@@ -10,18 +12,29 @@
 #define MID_CODE 	1861  // 1500 / 3.3 * 4096 = ~1861
 #define HIGH_CODE 	3722 // 3000 / 3.3 * 4096 = ~3722
 
-#define WAVE_SQUARE 	0
-#define WAVE_TRIANGLE 	1
-#define WAVE_SAWTOOTH	3
-#define WAVE_SINE		4
 
-static uint16_t square[TABLE_LEN]; // not const because change in duty cycle will rewrite it
-static const uint16_t triangle[TABLE_LEN];
-static const uint16_t sawtooth[TABLE_LEN];
-static const uint16_t sine[TABLE_LEN];
-static const uint16_t *tables[4] = {sqaure, triangle, sawtooth, sine};
+typedef enum {
+	SQUARE,
+	TRIANGLE,
+	SAWTOOTH,
+	SINE
+} wave_state;
 
+typedef struct {
+	wave_state shape;
+	uint8_t duty;
+	volatile uint8_t step;
+	uint16_t index;
+	const uint16_t *volatile active;
 
+} Waveform;
+
+void Waveform_Init(void);
+uint16_t next_sample(void);
+void set_frequency(uint16_t hz);
+void set_shape(wave_state shape);
+void change_duty(uint8_t delta);
+void reset_duty(void);
 
 
 #endif // WAVEFORM_H

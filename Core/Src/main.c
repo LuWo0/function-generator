@@ -97,6 +97,9 @@ int main(void)
   /* Initialize USER push-button, will be used to trigger an interrupt each time it's pressed.*/
   BSP_PB_Init(BUTTON_USER, BUTTON_MODE_EXTI);
 
+  // IMPORTANT!!!
+  // Call DAC_Init() after BSP_PB_INIT so that PA5 is set to SPI mode
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
